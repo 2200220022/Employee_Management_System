@@ -1,0 +1,214 @@
+###################################################################
+# This program makes the appropriate changes to the "employees"
+# dictionary that is managed in the main program called
+# "employee_management_system"
+###################################################################
+from employee import *
+from user_validation import *
+###################################################################
+# This function routes the Process_Menu_Options class to the correct function
+###################################################################
+def choice_menu_main(choice, employees):
+    if choice == 1:
+        choice_message = "lookup"
+        lookup_employee(choice_message, employees)
+    elif choice == 2:
+        choice_message = "add"
+        add_employee(choice_message, employees)
+    elif choice == 3:
+        choice_message = "change"
+        change_employee(choice_message, employees)
+    elif choice == 4:
+        choice_message = "delete"
+        delete_employee(choice_message, employees)
+    else:
+        print("error")
+        return employees
+###################################################################
+# This function handles the code to lookup an employee
+###################################################################
+def lookup_employee(choice_message, employees):
+    # Check if the dictionary "employees" is empty
+    current_dict_status, employees = check_if_dictionary_empty(choice_message, employees)
+    if current_dict_status == "empty":
+        return employees
+
+    # Proceed if dictionary not empty
+    still_looking_up = True
+    while still_looking_up:
+
+        # Ask user for employee ID
+        employee_id, employees = validate_employee_id(choice_message, employees)
+
+        # Return to main menu if user entered x for exit
+        if employee_id == "x":
+            return employees
+
+        # Print employee information if ID already exists
+        if employee_id not in employees:
+            print("\nI'm sorry. I could not find that employee")
+        else:
+            print(f"{Employee.return_employee(employee_id, employees)}")
+
+        # Ask user if they want to look up another employee
+        user_input, employees = try_again_confirmation(choice_message, employees)
+        if user_input == "n":
+            print("last last - banana")
+            print(employees)
+            return employees
+
+###################################################################
+# This function handles the code to add an employee
+###################################################################
+def add_employee(choice_message, employees):
+    still_adding_employees = True
+    while still_adding_employees:
+
+        # Obtain employee ID from user
+        employee_id = validate_employee_id(choice_message)
+
+        # Return to main menu if user enters x to exit
+        if employee_id == "x":
+            return employees
+
+        # Check if dictionary "employees" contains any info
+        if employees:
+            # Print out employee info if ID already exists
+            if employees[employee_id] in employees:
+                print(f"Employee {employee_id} is already in the list.\n")
+                print(f"{Employee.return_employee(employee_id, employees)}")
+
+            # Collect applicable info if ID doesn't already exist
+            else:
+                employee_name, employee_department, employee_job_title = \
+                    Employee.obtain_employee_information(employee_id)
+
+                decision_to_add = final_choice_confirmation(choice_message,
+                                                                           employee_id, employee_name,
+                                                                           employee_department,
+                                                                           employee_job_title)
+
+        # Otherwise if dictionary "employees" is empty
+        else:
+            employee_name, employee_department, employee_job_title = \
+                Employee.obtain_employee_information(employee_id)
+
+            decision_to_add = final_choice_confirmation(choice_message,
+                                                                        employee_id, employee_name,
+                                                                        employee_department,
+                                                                       employee_job_title)
+        # Add new employee info if user verifies y for yes
+        if decision_to_add == "y":
+            employees[employee_id] = [f'{employee_name}',
+                                            f'{employee_department}',
+                                            f'{employee_job_title}']
+            print("\nEmployee Added:")
+            print(f"{Employee.return_employee(employee_id, employees)}\n")
+
+        # Ask user if they want to add another employee
+        user_input = try_again_confirmation(choice_message)
+        if user_input == "n":
+            return employees
+
+###################################################################
+# This function handles the code to add an employee
+###################################################################
+def change_employee(choice_message, employees):
+
+    # Check if the dictionary "employees" is empty
+    current_dict_status, employees = check_if_dictionary_empty(choice_message, employees)
+    if current_dict_status == "empty":
+        return employees
+
+    # Proceed with code if dictionary "employees" is not empty
+    still_changing = True
+    while still_changing:
+
+        # Obtain employee ID number that should be updated
+        employee_id = validate_employee_id(choice_message)
+
+        # Print out message if ID does not exist yet
+        if employee_id not in employees:
+            print("I'm sorry. That employee does not exist in the system.\n")
+
+        # Proceed with change if ID exists
+        else:
+
+            # Print the employee information
+            print(f"Thank you! That employee ID corresponds to the individual below:\n")
+            print(f"\n{Employee.return_employee(employee_id, employees)}")
+
+            # Confirm if user wants to proceed to change employee
+            decision_to_change = simple_choice_confirmation(choice_message)
+
+            # If user enters y for yes, proceed with change
+            if decision_to_change == "y":
+                print(f"Great! Please enter all information for employee {employee_id}")
+
+                # Collect the applicable information
+                employee_name, employee_department, employee_job_title = Employee.obtain_employee_information(employee_id)
+
+                # Confirm if employee ID should be updated with the user entered info
+                change_decision = final_choice_confirmation(choice_message,
+                                                                            employee_id, employee_name,
+                                                                            employee_department,
+                                                                            employee_job_title)
+
+                # If user confirms change, update the employee
+                if change_decision == "y":
+                    employees[employee_id] = [employee_name, employee_department, employee_job_title]
+
+        # Find out if user wants to change additional employees
+        decision_to_continue_changing = try_again_confirmation(choice_message)
+
+        if decision_to_continue_changing == "n":
+            return employees
+
+###################################################################
+# This function handles the code to delete an employee
+###################################################################
+def delete_employee(choice_message, employees):
+
+    # Check if the dictionary "employees" is empty
+    current_dict_status, employees = check_if_dictionary_empty(choice_message, employees)
+    if current_dict_status == "empty":
+        return employees
+
+    # Proceed with code if dictionary not empty
+    still_deleting = True
+    while still_deleting:
+
+        # Obtain ID from user
+        employee_id = validate_employee_id(choice_message)
+
+        # Print message if ID does not exist
+        if employee_id not in employees:
+            print("I'm sorry. That ID does not exist.")
+
+        # Proceed with deletion if ID exists
+        else:
+            print("\nThank you!\n")
+
+            # Print out employee information for ID found
+            print("You selected the following employee:")
+            print(f"{Employee.return_employee(employee_id, employees)}")
+
+            # Confirm if user wants to delete the employee found
+            user_input = simple_choice_confirmation(choice_message)
+            if user_input == "y":
+                if employee_id in employees:
+                    del employees[employee_id]
+                    print(f"Employee {employee_id} deleted")
+
+        # Ask if user wants to delete another employee
+        user_input = try_again_confirmation(choice_message)
+        if user_input == "n":
+            return employees
+
+def check_if_dictionary_empty(choice_message, employees):
+    if employees:
+        return "not_empty", employees
+    else:
+        print("I'm sorry. The dictionary is currently empty."
+              f"There are no employees to {choice_message}")
+        return "empty", employees
