@@ -1,0 +1,78 @@
+# This program handles most of the user input validation needed
+
+###########################################################################################
+# This function returns all employee info entered by user and asks if change should proceed
+# This is used when the user_input info has not been saved to the dictionary titled
+# "employees" yet
+###########################################################################################
+def final_choice_confirmation(choice_message, employee_id, employee_name,
+                              employee_department, employee_job_title, employees):
+    waiting_for_valid_input = True
+    while waiting_for_valid_input:
+        print("\nYou entered:")
+        print(f"__________EMPLOYEE: {employee_id}__________\n"
+              f'Name: {employee_name}\nDepartment: {employee_department}\n'
+              f'Job Title: {employee_job_title}\n')
+        change_decision = input(f"Y = {choice_message} employee\n"
+                                f"N = No do not {choice_message} employee:\n"
+                                ).lower().replace(" ", "").replace(".", "")
+
+        # If user confirms change, move forward with change
+        if change_decision == "y" or change_decision == "n":
+            return change_decision, employees
+        else:
+            print("I'm sorry. I don't understand.")
+
+###########################################################################################
+# This function asks user if the program should continue with a change
+###########################################################################################
+def simple_choice_confirmation(choice_message, employees):
+    waiting_for_valid_input = True
+    while waiting_for_valid_input:
+        print(f"Do you want to {choice_message} the selected employee?")
+        user_choice = input(f"Y = {choice_message} employee\n"
+                            f"N = No do not {choice_message} employee:\n"
+                            ).lower().replace(" ", "").replace(".", "")
+        if user_choice == "y" or user_choice == "n":
+            print("\nSounds great!\n")
+            return user_choice, employees
+        else:
+            print("I'm sorry. I don't understand.")
+
+###########################################################################################
+# This function asks user if the program should exit to the main menu or loop back and
+# let the user try the same menu option that was originally chosen
+###########################################################################################
+def try_again_confirmation(choice_message, employees):
+    waiting_for_valid_response = True
+    while waiting_for_valid_response:
+        print("___________________________________________________________________\n"
+              f"|Do you want to {choice_message} an additional employee?")
+        user_input = input(f"|Y = yes\n|N = no\n"
+                           "___________________________________________"
+                           "________________________\n"
+                           ).lower().replace(" ", "").replace(".", "")
+        if user_input == "y" or user_input == "n":
+            return user_input, employees
+        else:
+            print("\nI'm sorry. I did not understand.\n")
+
+###########################################################################################
+# This function validates an employee ID
+###########################################################################################
+def validate_employee_id(choice_message, employees):
+    # Ask for new employee number and check if ID already exists
+    employee_id = "z"
+    while not employee_id.isdigit():
+        employee_id = input("___________________________________________"
+                            "________________________\n"
+                            f"Please enter the ID number for the employee to {choice_message}.\n"
+                            'or enter "X" to exit to main menu\n'
+                            "___________________________________________"
+                            "________________________\n").lower()
+
+        # Return to main program if user doesn't have employees to add
+        if employee_id == "x" or employee_id.isdigit():
+            return employee_id, employees
+        else:
+            print("""\nI'm sorry. That is not a number or an "X" to exit\n""")
