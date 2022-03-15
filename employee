@@ -1,0 +1,48 @@
+########################################################################
+# pickle_employee_data.py
+# Author: 2200220022
+########################################################################
+# This file holds the employee class
+########################################################################
+
+class Employee:
+
+    def __init__(id_number, employees):
+        this_employee = list(employees[id_number])
+        id_number.__name = this_employee[0]
+        id_number.__dept = this_employee[1]
+        id_number.__job_title = this_employee[2]
+
+    # This function prints out all the information for an employee
+    def return_employee(id_number,  employees):
+        this_employee = list(employees[id_number])
+        return f"__________EMPLOYEE: {id_number}__________\n" \
+               f'Name: {this_employee[0]}\nDepartment: {this_employee[1]}\n' \
+               f'Job Title: {this_employee[2]}\n'
+
+    # This function obtains employee information to add or update an employee
+    def obtain_employee_information(self, employees):
+        # Ask user for employee first name
+        employee_first_name = "1"
+        while not employee_first_name.replace(" ", "").isalpha():
+            employee_first_name = input("Employee First Name: ").upper()
+
+        # Ask user for employee last name
+        employee_last_name = "2"
+        while not employee_last_name.replace(" ", "").isalpha():
+            employee_last_name = input("Employee Last Name: ").upper()
+
+        # Put first and last name together
+        employee_name = f"{employee_first_name} {employee_last_name}"
+
+        # Ask user for employee department
+        employee_department = "1"
+        while not employee_department.replace(" ", "").isalpha():
+            employee_department = input("Employee Department: ").upper()
+
+        # Ask user for employee job title
+        employee_job_title = "1"
+        while not employee_job_title.replace(" ", "").isalpha():
+            employee_job_title = input("Employee Job Title: ").upper()
+
+        return employee_name, employee_department, employee_job_title, employees
