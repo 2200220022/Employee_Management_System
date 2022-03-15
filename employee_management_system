@@ -1,0 +1,53 @@
+###########################################################################################
+# employee_management_system.py
+# Author: 2200220022
+###########################################################################################
+# This is the main program that runs all code
+###########################################################################################
+
+# Import code from external files
+from employee import *
+from pickle_functions import *
+import process_menu_options
+import the_main_menu
+
+###########################################################################################
+# This  functions is the main function that runs all code
+###########################################################################################
+def main():
+    # Open file (or create one) that will hold pickled employee data
+    employees = open_employee_data()
+
+    # Message that prints out the name of the program
+    print("############################################################################")
+    print("#\t\t\t\t\t\t\tEMPLOYEE MANAGEMENT SYSTEM\t\t\t\t\t   #")
+    print("############################################################################\n")
+
+    # A message to explain the main menu
+    print(f"Please choose one of the following menu options.\n"
+          "Enter the number that corresponds with your choice:\n")
+
+    # Beginning of loop for program
+    working = True
+    while working:
+        # Find out menu choice for user
+        choice, choice_message, employees = the_main_menu.main_menu(employees)
+
+        print(employees)
+
+        # Process the menu option chosen by the user
+        if choice == 5:
+            print(f"Saving employee data . . . \n")
+            working = False
+        else:
+            employees = process_menu_options.choice_menu_main(choice, employees)
+            print("fuck")
+            print(employees)
+
+    # Save the employee data changes to the file and terminate program
+    save_employee_data(employees)
+    print("Employee data saved")
+
+#Execute main program
+if __name__ == '__main__':
+    main()
